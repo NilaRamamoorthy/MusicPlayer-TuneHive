@@ -25,10 +25,11 @@ def can_resend(otp_obj):
 def send_otp_email(email, otp):
     subject = "Your Tune Hive OTP"
     message = f"Your OTP is {otp}. It will expire in 10 minutes."
+    
     send_mail(
         subject,
         message,
         settings.DEFAULT_FROM_EMAIL,
         [email],
-        fail_silently=False,
+        fail_silently=True,
     )
