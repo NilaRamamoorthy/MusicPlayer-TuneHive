@@ -1,7 +1,10 @@
 const base = () => import.meta.env.VITE_API_BASE_URL;
 
 async function request(path, { method = "GET", body, token } = {}) {
-  const res = await fetch(`${base()}${path}`, {
+  // Join base + path properly to avoid double slashes
+  const url = `${base().replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
+
+  const res = await fetch(url, {
     method,
     headers: {
       "Content-Type": "application/json",
