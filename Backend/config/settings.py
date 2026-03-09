@@ -68,12 +68,14 @@ MIDDLEWARE = [
 # ---------------------------------------------------
 # CORS (for React frontend)
 # ---------------------------------------------------
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOWED_ORIGINS = [
     "https://music-player-tune-hive.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
 
 # ---------------------------------------------------
 # URL / WSGI
