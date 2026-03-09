@@ -83,11 +83,20 @@ class SendEmailOTP(APIView):
                 last_sent_at=timezone.now(),
             )
 
-        # Sends OTP using your configured email backend
-        send_otp_email(email, otp)
+        # safe email sending
+        try:
+            send_otp_email(email, otp)
+        except Exception as e:
+            print("Error sending OTP:", e)
+            return Response(
+                {
+                    "message": "OTP generated, but email could not be sent",
+                    "otp": otp,  # optional for testing
+                },
+                status=status.HTTP_200_OK,
+            )
 
         return Response({"message": "OTP sent"}, status=status.HTTP_200_OK)
-
 
 class VerifyEmailOTP(APIView):
     def post(self, request):
