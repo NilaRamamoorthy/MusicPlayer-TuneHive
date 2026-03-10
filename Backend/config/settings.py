@@ -70,6 +70,7 @@ MIDDLEWARE = [
 # ---------------------------------------------------
 CORS_ALLOWED_ORIGINS = [
     "https://music-player-tune-hive.vercel.app",
+    "https://music-player-tune-hive-33gp.vercel.app",
     "http://localhost:5173",
 ]
 
