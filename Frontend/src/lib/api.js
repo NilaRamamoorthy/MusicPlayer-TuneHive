@@ -1,10 +1,11 @@
-// api.js
-const base = () => import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// Helper for making API requests
+console.log("API BASE URL:", BASE_URL); // confirms env variable
+
 async function request(path, { method = "GET", body, token } = {}) {
-  // Properly join base + path to avoid double slashes
-  const url = `${base().replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
+  const url = `${BASE_URL}${path}`;
+
+  console.log("API Request →", url, body); // debug
 
   const res = await fetch(url, {
     method,
@@ -13,22 +14,27 @@ async function request(path, { method = "GET", body, token } = {}) {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
-    credentials: "include", // Needed if using cookies with CSRF
   });
+
+  console.log("API Status:", res.status);
 
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    const msg = data?.error || data?.detail || "Request failed";
-    throw new Error(msg);
+    console.error("API Error:", data);
+    throw new Error(data?.error || data?.detail || "Request failed");
   }
+
+  console.log("API Response:", data);
   return data;
 }
 
-// Export all API calls
 export const authApi = {
   sendOtp: (email) =>
-    request("/api/auth/email/send-otp/", { method: "POST", body: { email } }),
+    request("/api/auth/email/send-otp/", {
+      method: "POST",
+      body: { email },
+    }),
 
   verifyOtp: (email, otp) =>
     request("/api/auth/email/verify-otp/", {
@@ -36,9 +42,13 @@ export const authApi = {
       body: { email, otp },
     }),
 
-  me: (token) => request("/api/me/", { token }),
+  me: (token) =>
+    request("/api/me/", {
+      token,
+    }),
 
-  plans: () => request("/api/plans/"),
+  plans: () =>
+    request("/api/plans/"),
 
   upgradeSubscription: (token, planName) =>
     request("/api/subscription/upgrade/", {
