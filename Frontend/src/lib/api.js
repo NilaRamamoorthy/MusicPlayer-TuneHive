@@ -1,7 +1,9 @@
+// api.js
 const base = () => import.meta.env.VITE_API_BASE_URL;
 
+// Helper for making API requests
 async function request(path, { method = "GET", body, token } = {}) {
-  // Join base + path properly to avoid double slashes
+  // Properly join base + path to avoid double slashes
   const url = `${base().replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
 
   const res = await fetch(url, {
@@ -11,9 +13,11 @@ async function request(path, { method = "GET", body, token } = {}) {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
+    credentials: "include", // Needed if using cookies with CSRF
   });
 
   const data = await res.json().catch(() => ({}));
+
   if (!res.ok) {
     const msg = data?.error || data?.detail || "Request failed";
     throw new Error(msg);
@@ -21,6 +25,7 @@ async function request(path, { method = "GET", body, token } = {}) {
   return data;
 }
 
+// Export all API calls
 export const authApi = {
   sendOtp: (email) =>
     request("/api/auth/email/send-otp/", { method: "POST", body: { email } }),
