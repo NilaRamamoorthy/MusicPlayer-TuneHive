@@ -24,7 +24,7 @@ SECRET_KEY = os.getenv(
     "django-insecure-_*w3ls=^@)mq%njmm95u0lvslo^*jfqx3d+#ogpnu#ocr=juge"
 )
 
-DEBUG = os.getenv("DEBUG", "True") == "True"
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -56,11 +56,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.common.CommonMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -70,19 +68,18 @@ MIDDLEWARE = [
 # ---------------------------------------------------
 # CORS (for React frontend)
 # ---------------------------------------------------
-# ---------------------------------------------------
-# CORS
-# ---------------------------------------------------
-
 CORS_ALLOWED_ORIGINS = [
+    "https://music-player-tune-hive.vercel.app",
+    "http://localhost:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = [
     "https://music-player-tune-hive.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://music-player-tune-hive.vercel.app",
-]
+
 # ---------------------------------------------------
 # URL / WSGI
 # ---------------------------------------------------
